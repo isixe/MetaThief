@@ -207,43 +207,36 @@ export async function GET(request: Request) {
       favicon = resolveUrl(iconHref)
     }
     if (!favicon) {
-      const appleTouchIconHref = extractLinkHref('apple-touch-icon', html)
-      if (appleTouchIconHref) {
-        favicon = resolveUrl(appleTouchIconHref)
-      }
-    }
-    if (!favicon) {
-      if (!favicon) {
-        // Try multiple common favicon formats
-        const commonFaviconFormats = [
-          'favicon.ico',
-          'favicon.png',
-          'favicon.svg'
-        ]
+      // Try multiple common favicon formats
+      const commonFaviconFormats = ['favicon.ico', 'favicon.png', 'favicon.svg']
 
-        // Use Promise.any to get the first successful response
-        try {
-          const checkFavicon = async (format: string) => {
-            const faviconUrl = `${baseUrl.origin}/${format}`
-            const response = await fetch(faviconUrl, { method: 'HEAD' })
-            if (response.ok) {
-              return faviconUrl
-            }
-            throw new Error(`Favicon not found: ${format}`)
+      // Use Promise.any to get the first successful response
+      try {
+        const checkFavicon = async (format: string) => {
+          const faviconUrl = `${baseUrl.origin}/${format}`
+          const response = await fetch(faviconUrl, { method: 'HEAD' })
+          if (response.ok) {
+            return faviconUrl
           }
+          throw new Error(`Favicon not found: ${format}`)
+        }
 
-          // We'll use Promise.allSettled and then find the first successful one
-          const faviconPromises = commonFaviconFormats.map((format) =>
-            checkFavicon(format)
-          )
-          favicon = await Promise.any(faviconPromises)
-        } catch (error) {
+        // We'll use Promise.allSettled and then find the first successful one
+        const faviconPromises = commonFaviconFormats.map((format) =>
+          checkFavicon(format)
+        )
+        favicon = await Promise.any(faviconPromises)
+      } catch (error) {
+        const appleTouchIconHref = extractLinkHref('apple-touch-icon', html)
+        if (appleTouchIconHref) {
+          favicon = resolveUrl(appleTouchIconHref)
+        } else {
           // If all formats fail, default to favicon.ico
           favicon = `${baseUrl.origin}/favicon.ico`
-          console.log(
-            'Could not verify favicon existence, defaulting to favicon.ico'
-          )
         }
+        console.log(
+          'Could not verify favicon existence, defaulting to favicon.ico'
+        )
       }
     }
 
