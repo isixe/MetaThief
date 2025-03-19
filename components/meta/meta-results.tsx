@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { Button } from '@/components/ui/button'
@@ -14,6 +13,7 @@ import type { MetaData } from '@/types/meta'
 import { Check, Copy, HelpCircle } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { ImagePreview } from '../ui/image-preview'
 
 interface MetaResultsProps {
   metaData: MetaData
@@ -147,13 +147,10 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                   <div className="mt-2">
                     <div className="mb-2 flex items-start gap-2">
                       <div className="relative h-6 w-6 flex-shrink-0 overflow-hidden rounded border">
-                        <img
+                        <ImagePreview
                           src={metaInfo.favicon || '/placeholder.svg'}
                           alt="Primary Favicon"
                           className="h-full w-full object-contain"
-                          onError={(e) => {
-                            e.currentTarget.src = '/placeholder.svg'
-                          }}
                         />
                       </div>
                       <p className="break-all text-sm">
@@ -174,13 +171,10 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                               className="flex flex-shrink-0 flex-col items-center"
                             >
                               <div className="relative mb-2 h-16 w-16 overflow-hidden rounded border">
-                                <img
+                                <ImagePreview
                                   src={icon || '/placeholder.svg'}
                                   alt={`Icon ${index + 1}`}
                                   className="h-full w-full object-contain"
-                                  onError={(e) => {
-                                    e.currentTarget.src = '/placeholder.svg'
-                                  }}
                                 />
                               </div>
                               <div className="flex items-center">
