@@ -2,25 +2,25 @@ import { NextResponse } from 'next/server'
 
 // All supported meta tags
 const SUPPORTED_META_TAGS = [
+  'language',
+  'charset',
+  'viewport',
   'title',
   'description',
   'keywords',
-  'author',
   'favicon',
-  'charset',
-  'viewport',
-  'robots',
+  'author',
   'generator',
   'theme',
   'canonical',
-  'language',
   'ogTitle',
   'ogDescription',
   'ogImage',
   'twitterCard',
   'twitterTitle',
   'twitterDescription',
-  'twitterImage'
+  'twitterImage',
+  'robots'
 ]
 
 export async function GET(request: Request) {

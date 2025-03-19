@@ -72,18 +72,17 @@ export default function ApiDocsPage() {
 
                 <h4 className="mb-2 mt-4 font-medium">Supported Meta Tags:</h4>
                 <ul className="grid list-disc grid-cols-2 gap-2 pl-6 md:grid-cols-3">
+                  <li>language</li>
+                  <li>charset</li>
+                  <li>viewport</li>
                   <li>title</li>
                   <li>description</li>
                   <li>keywords</li>
-                  <li>author</li>
                   <li>favicon</li>
-                  <li>charset</li>
-                  <li>viewport</li>
-                  <li>robots</li>
+                  <li>author</li>
                   <li>generator</li>
                   <li>theme</li>
                   <li>canonical</li>
-                  <li>language</li>
                   <li>ogTitle</li>
                   <li>ogDescription</li>
                   <li>ogImage</li>
@@ -91,6 +90,7 @@ export default function ApiDocsPage() {
                   <li>twitterTitle</li>
                   <li>twitterDescription</li>
                   <li>twitterImage</li>
+                  <li>robots</li>
                 </ul>
               </div>
 

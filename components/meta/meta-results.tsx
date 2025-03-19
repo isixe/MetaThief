@@ -74,25 +74,25 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
 
   // Define all possible meta tags to display, even if empty
   const allMetaTags = [
+    'language',
+    'charset',
+    'viewport',
     'title',
     'description',
     'keywords',
-    'author',
     'favicon',
-    'charset',
-    'viewport',
-    'robots',
+    'author',
     'generator',
     'theme',
     'canonical',
-    'language',
     'ogTitle',
     'ogDescription',
     'ogImage',
     'twitterCard',
     'twitterTitle',
     'twitterDescription',
-    'twitterImage'
+    'twitterImage',
+    'robots'
   ]
 
   return (
