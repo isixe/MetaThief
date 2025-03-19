@@ -152,8 +152,7 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                           alt="Primary Favicon"
                           className="h-full w-full object-contain"
                           onError={(e) => {
-                            e.currentTarget.src =
-                              '/placeholder.svg?height=24&width=24'
+                            e.currentTarget.src = '/placeholder.svg'
                           }}
                         />
                       </div>
@@ -180,8 +179,7 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                                   alt={`Icon ${index + 1}`}
                                   className="h-full w-full object-contain"
                                   onError={(e) => {
-                                    e.currentTarget.src =
-                                      '/placeholder.svg?height=64&width=64'
+                                    e.currentTarget.src = '/placeholder.svg'
                                   }}
                                 />
                               </div>
