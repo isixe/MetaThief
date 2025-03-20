@@ -56,7 +56,7 @@ const validateUrl = (url: string | null, metaParams: string[] | undefined) => {
       return NextResponse.json(
         {
           error: `Invalid meta parameters: ${invalidParams.join(', ')}`,
-          supportedParams: SUPPORTED_META_TAGS
+          supportedParams: [...SUPPORTED_META_TAGS, 'icons']
         },
         { status: 400 }
       )

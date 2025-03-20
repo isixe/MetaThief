@@ -100,7 +100,7 @@ export default function ApiDocsPage() {
 
                 <h4 className="mb-2 mt-4 font-medium">Supported Meta Tags:</h4>
                 <ul className="grid list-disc grid-cols-2 gap-2 pl-6 md:grid-cols-3">
-                  {allMetaTags.map((tag) => (
+                  {[...allMetaTags, 'icons'].map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
