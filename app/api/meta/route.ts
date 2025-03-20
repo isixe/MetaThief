@@ -286,12 +286,7 @@ export async function GET(request: Request) {
     if (metaParams) {
       const filteredData: { [key: string]: any } = {}
       metaParams.forEach((param) => {
-        if (param === 'favicon') {
-          filteredData[param] = metaData[param]
-          filteredData.icons = icons
-        } else {
-          filteredData[param] = metaData[param]
-        }
+        filteredData[param] = metaData[param]
       })
       return NextResponse.json(filteredData)
     }
