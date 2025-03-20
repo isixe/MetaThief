@@ -41,32 +41,53 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
   }
 
   const metaExplanations: { [key: string]: string } = {
+    language:
+      "Specifies the primary language of the webpage's content using language codes (e.g., 'en' for English).",
+    charset:
+      "Defines the character encoding used for the webpage, typically 'UTF-8' to support international characters.",
+    viewport:
+      'Controls how the webpage is displayed on various devices, especially important for responsive design.',
     title:
-      "The title of the webpage, typically displayed in the browser's title bar or tab.",
+      "The title of the webpage, displayed in the browser's tab and used in search engine results.",
     description:
-      "A brief summary of the webpage's content, often used in search engine results.",
-    keywords: "Relevant words or phrases that describe the webpage's content.",
-    author:
-      "The creator or organization responsible for the webpage's content.",
+      "A concise summary of the webpage's content, often displayed in search engine results.",
+    keywords:
+      "Relevant words or phrases that describe the webpage's content to help with search engine indexing.",
     favicon:
-      "Icons associated with the website, displayed in the browser's address bar, bookmarks, or tabs.",
-    charset: 'The character encoding of the webpage.',
-    viewport: 'Controls how the webpage is displayed on mobile devices.',
-    generator: 'The software used to generate the webpage.',
-    theme: 'The color theme of the webpage.',
-    canonical: 'The preferred URL of the webpage.',
-    language: 'The language of the webpage content.',
+      'The small icon associated with the website, displayed in browser tabs, bookmarks, and history.',
+    author:
+      'Identifies the person or organization responsible for creating the webpage content.',
+    generator: 'Indicates the software or system used to generate the webpage.',
+    theme:
+      'Specifies the color theme of the webpage, particularly for mobile browsers.',
+    canonical:
+      'Indicates the preferred URL for the webpage to prevent duplicate content issues.',
+    ogUrl:
+      'The canonical URL of the webpage for Open Graph protocol when shared on social media.',
     ogTitle:
-      'The title of the webpage when shared on social media platforms (Open Graph).',
+      'The title of the webpage when shared on social media platforms using Open Graph protocol.',
+    ogSiteName:
+      'The name of the overall website when content is shared via Open Graph protocol.',
     ogDescription:
-      'A description of the webpage when shared on social media platforms (Open Graph).',
+      'A description of the webpage when shared on social media using Open Graph protocol.',
     ogImage:
-      'An image representing the webpage when shared on social media platforms (Open Graph).',
+      'The URL of an image that represents the webpage when shared via Open Graph protocol.',
+    ogImageAlt:
+      'Alternative text for the Open Graph image for accessibility purposes.',
+    ogType:
+      "Specifies the type of content being shared (e.g., 'website', 'article') via Open Graph.",
+    twitterSite:
+      'The Twitter @username of the website or publisher for Twitter Card metadata.',
     twitterCard:
-      'Specifies the type of Twitter Card to be created when the webpage is shared on Twitter.',
+      'Specifies the type of Twitter Card to be used when the webpage is shared on Twitter.',
     twitterTitle: 'The title of the webpage when shared on Twitter.',
+    twitterCreator:
+      'The Twitter @username of the content creator for attribution in Twitter Cards.',
     twitterDescription: 'A description of the webpage when shared on Twitter.',
-    twitterImage: 'An image representing the webpage when shared on Twitter.'
+    twitterImage:
+      'The URL of an image that represents the webpage when shared on Twitter.',
+    robots:
+      'Provides instructions to search engine crawlers about how to index the webpage.'
   }
 
   // Extract icons array from metaData
@@ -85,11 +106,17 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
     'generator',
     'theme',
     'canonical',
+    'ogUrl',
     'ogTitle',
+    'ogSiteName',
     'ogDescription',
     'ogImage',
+    'ogImageAlt',
+    'ogType',
+    'twitterSite',
     'twitterCard',
     'twitterTitle',
+    'twitterCreator',
     'twitterDescription',
     'twitterImage',
     'robots'
