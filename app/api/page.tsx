@@ -6,6 +6,34 @@ import {
   CardTitle
 } from '@/components/ui/card'
 
+const allMetaTags = [
+  'language',
+  'charset',
+  'viewport',
+  'title',
+  'description',
+  'keywords',
+  'favicon',
+  'author',
+  'generator',
+  'theme',
+  'canonical',
+  'ogUrl',
+  'ogTitle',
+  'ogSiteName',
+  'ogDescription',
+  'ogImage',
+  'ogImageAlt',
+  'ogType',
+  'twitterSite',
+  'twitterCard',
+  'twitterTitle',
+  'twitterCreator',
+  'twitterDescription',
+  'twitterImage',
+  'robots'
+]
+
 export default function ApiDocsPage() {
   return (
     <div className="container mx-auto max-w-4xl p-4">
@@ -72,25 +100,9 @@ export default function ApiDocsPage() {
 
                 <h4 className="mb-2 mt-4 font-medium">Supported Meta Tags:</h4>
                 <ul className="grid list-disc grid-cols-2 gap-2 pl-6 md:grid-cols-3">
-                  <li>language</li>
-                  <li>charset</li>
-                  <li>viewport</li>
-                  <li>title</li>
-                  <li>description</li>
-                  <li>keywords</li>
-                  <li>favicon</li>
-                  <li>author</li>
-                  <li>generator</li>
-                  <li>theme</li>
-                  <li>canonical</li>
-                  <li>ogTitle</li>
-                  <li>ogDescription</li>
-                  <li>ogImage</li>
-                  <li>twitterCard</li>
-                  <li>twitterTitle</li>
-                  <li>twitterDescription</li>
-                  <li>twitterImage</li>
-                  <li>robots</li>
+                  {allMetaTags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
                 </ul>
               </div>
 
