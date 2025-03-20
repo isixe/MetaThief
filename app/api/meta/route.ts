@@ -23,50 +23,124 @@ const SUPPORTED_META_TAGS = [
   'robots'
 ]
 
+const validateUrl = (url: string | null, metaParams: string[] | undefined) => {
+  if (!url) {
+    return NextResponse.json(
+      {
+        error: 'Missing URL parameter',
+        example: '/api/meta?url=https://example.com&meta=title,description'
+      },
+      { status: 400 }
+    )
+  }
+  if (!url.startsWith('http')) {
+    return NextResponse.json(
+      {
+        error: 'Invalid URL. URL must start with http:// or https://',
+        example: '/api/meta?url=https://example.com'
+      },
+      { status: 400 }
+    )
+  }
+  if (metaParams) {
+    const invalidParams = metaParams.filter(
+      (param) => !SUPPORTED_META_TAGS.includes(param)
+    )
+    if (invalidParams.length > 0) {
+      return NextResponse.json(
+        {
+          error: `Invalid meta parameters: ${invalidParams.join(', ')}`,
+          supportedParams: SUPPORTED_META_TAGS
+        },
+        { status: 400 }
+      )
+    }
+  }
+  return null
+}
+
+const extractTag = (tag: string, html: string): string => {
+  const regex = new RegExp(`<${tag}[^>]*>(.*?)</${tag}>`, 'is')
+  const match = html.match(regex)
+  return match ? match[1].trim() : ''
+}
+
+const extractMetaContent = (
+  name: string,
+  html: string,
+  property = false
+): string => {
+  const attributeType = property ? 'property' : 'name'
+  const regex = new RegExp(
+    `<meta[^>]*${attributeType}=["']${name}["'][^>]*content=["']([^"']*)["'][^>]*>`,
+    'i'
+  )
+  const match = html.match(regex)
+  if (match) return match[1]
+
+  // Try the reverse order (content attribute before name/property)
+  const reverseRegex = new RegExp(
+    `<meta[^>]*content=["']([^"']*)["'][^>]*${attributeType}=["']${name}["'][^>]*>`,
+    'i'
+  )
+  const reverseMatch = html.match(reverseRegex)
+  return reverseMatch ? reverseMatch[1] : ''
+}
+
+const extractLinkHref = (rel: string, html: string): string => {
+  const regex = new RegExp(
+    `<link[^>]*rel=["']${rel}["'][^>]*href=["']([^"']*)["'][^>]*>`,
+    'i'
+  )
+  const match = html.match(regex)
+  if (match) return match[1]
+
+  // Try the reverse order (href attribute before rel)
+  const reverseRegex = new RegExp(
+    `<link[^>]*href=["']([^"']*)["'][^>]*rel=["']${rel}["'][^>]*>`,
+    'i'
+  )
+  const reverseMatch = html.match(reverseRegex)
+  return reverseMatch ? reverseMatch[1] : ''
+}
+
+const extractAllLinks = (relPattern: string, html: string): string[] => {
+  const results: string[] = []
+  const regex = new RegExp(
+    `<link[^>]*rel=["']([^"']*${relPattern}[^"']*)["'][^>]*href=["']([^"']*)["'][^>]*>`,
+    'gi'
+  )
+  let match
+
+  while ((match = regex.exec(html)) !== null) {
+    results.push(match[2])
+  }
+
+  // Try the reverse order (href attribute before rel)
+  const reverseRegex = new RegExp(
+    `<link[^>]*href=["']([^"']*)["'][^>]*rel=["']([^"']*${relPattern}[^"']*)["'][^>]*>`,
+    'gi'
+  )
+  while ((match = reverseRegex.exec(html)) !== null) {
+    results.push(match[1])
+  }
+
+  return results
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const url = searchParams.get('url')
+    const url = searchParams.get('url') ?? ''
     const metaParams = searchParams
       .get('meta')
       ?.split(',')
       .map((param) => param.trim())
 
-    // Validate URL parameter
-    if (!url) {
-      return NextResponse.json(
-        {
-          error: 'Missing URL parameter',
-          example: '/api/meta?url=https://example.com&meta=title,description'
-        },
-        { status: 400 }
-      )
-    }
-
-    if (!url.startsWith('http')) {
-      return NextResponse.json(
-        {
-          error: 'Invalid URL. URL must start with http:// or https://',
-          example: '/api/meta?url=https://example.com'
-        },
-        { status: 400 }
-      )
-    }
-
-    // Validate meta parameters
-    if (metaParams) {
-      const invalidParams = metaParams.filter(
-        (param) => !SUPPORTED_META_TAGS.includes(param)
-      )
-      if (invalidParams.length > 0) {
-        return NextResponse.json(
-          {
-            error: `Invalid meta parameters: ${invalidParams.join(', ')}`,
-            supportedParams: SUPPORTED_META_TAGS
-          },
-          { status: 400 }
-        )
-      }
+    // Validate URL parameter and meta parameters
+    const validationError = validateUrl(url, metaParams)
+    if (validationError) {
+      return validationError
     }
 
     // Fetch the HTML content
@@ -79,107 +153,6 @@ export async function GET(request: Request) {
 
     const html = await response.text()
     const baseUrl = new URL(url)
-
-    // Helper function to resolve relative URLs
-    const resolveUrl = (href: string) => {
-      if (!href) return ''
-      try {
-        return new URL(href, url).href
-      } catch (e) {
-        if (href.startsWith('/')) {
-          return `${baseUrl.origin}${href}`
-        } else {
-          return `${url.replace(/\/$/, '')}/${href.replace(/^\//, '')}`
-        }
-      }
-    }
-
-    // Helper function to extract content from HTML tags
-    const extractTag = (tag: string, html: string): string => {
-      const regex = new RegExp(`<${tag}[^>]*>(.*?)</${tag}>`, 'is')
-      const match = html.match(regex)
-      return match ? match[1].trim() : ''
-    }
-
-    // Helper function to extract attribute from HTML tags
-    const extractAttribute = (
-      tag: string,
-      attribute: string,
-      html: string
-    ): string => {
-      const regex = new RegExp(
-        `<${tag}[^>]*${attribute}=["']([^"']*)["'][^>]*>`,
-        'i'
-      )
-      const match = html.match(regex)
-      return match ? match[1] : ''
-    }
-
-    // Helper function to extract meta tag content
-    const extractMetaContent = (
-      name: string,
-      html: string,
-      property = false
-    ): string => {
-      const attributeType = property ? 'property' : 'name'
-      const regex = new RegExp(
-        `<meta[^>]*${attributeType}=["']${name}["'][^>]*content=["']([^"']*)["'][^>]*>`,
-        'i'
-      )
-      const match = html.match(regex)
-      if (match) return match[1]
-
-      // Try the reverse order (content attribute before name/property)
-      const reverseRegex = new RegExp(
-        `<meta[^>]*content=["']([^"']*)["'][^>]*${attributeType}=["']${name}["'][^>]*>`,
-        'i'
-      )
-      const reverseMatch = html.match(reverseRegex)
-      return reverseMatch ? reverseMatch[1] : ''
-    }
-
-    // Helper function to extract link href
-    const extractLinkHref = (rel: string, html: string): string => {
-      const regex = new RegExp(
-        `<link[^>]*rel=["']${rel}["'][^>]*href=["']([^"']*)["'][^>]*>`,
-        'i'
-      )
-      const match = html.match(regex)
-      if (match) return match[1]
-
-      // Try the reverse order (href attribute before rel)
-      const reverseRegex = new RegExp(
-        `<link[^>]*href=["']([^"']*)["'][^>]*rel=["']${rel}["'][^>]*>`,
-        'i'
-      )
-      const reverseMatch = html.match(reverseRegex)
-      return reverseMatch ? reverseMatch[1] : ''
-    }
-
-    // Helper function to extract all matching links
-    const extractAllLinks = (relPattern: string, html: string): string[] => {
-      const results: string[] = []
-      const regex = new RegExp(
-        `<link[^>]*rel=["']([^"']*${relPattern}[^"']*)["'][^>]*href=["']([^"']*)["'][^>]*>`,
-        'gi'
-      )
-      let match
-
-      while ((match = regex.exec(html)) !== null) {
-        results.push(match[2])
-      }
-
-      // Try the reverse order (href attribute before rel)
-      const reverseRegex = new RegExp(
-        `<link[^>]*href=["']([^"']*)["'][^>]*rel=["']([^"']*${relPattern}[^"']*)["'][^>]*>`,
-        'gi'
-      )
-      while ((match = reverseRegex.exec(html)) !== null) {
-        results.push(match[1])
-      }
-
-      return results
-    }
 
     // Extract charset
     let charset = ''
@@ -203,8 +176,9 @@ export async function GET(request: Request) {
     let favicon = ''
     const iconHref =
       extractLinkHref('icon', html) || extractLinkHref('shortcut icon', html)
-    if (iconHref) {
-      favicon = resolveUrl(iconHref)
+    if (iconHref && iconHref) {
+      const faviconUrl = new URL(iconHref, url)
+      favicon = faviconUrl.href
     }
     if (!favicon) {
       // Try multiple common favicon formats
@@ -229,16 +203,38 @@ export async function GET(request: Request) {
       } catch (error) {
         const appleTouchIconHref = extractLinkHref('apple-touch-icon', html)
         if (appleTouchIconHref) {
-          favicon = resolveUrl(appleTouchIconHref)
+          const faviconUrl = new URL(appleTouchIconHref, url)
+          favicon = faviconUrl.href
+          console.log(
+            'Could not verify favicon existence, defaulting to apple-touch-icon'
+          )
         } else {
           // If all formats fail, default to favicon.ico
           favicon = `${baseUrl.origin}/favicon.ico`
+          console.log(
+            'Could not verify favicon existence, defaulting to favicon.ico'
+          )
         }
-        console.log(
-          'Could not verify favicon existence, defaulting to favicon.ico'
-        )
       }
     }
+
+    // Collect all icons
+    const icons: string[] = []
+    if (favicon && !icons.includes(favicon)) {
+      icons.push(favicon)
+    }
+
+    const iconLinks = extractAllLinks('icon', html)
+    const appleTouchIconLinks = extractAllLinks('apple-touch-icon', html)
+
+    ;[...iconLinks, ...appleTouchIconLinks].forEach((href) => {
+      if (href) {
+        const fullUrl = new URL(href, url).toString()
+        if (fullUrl && !icons.includes(fullUrl)) {
+          icons.push(fullUrl)
+        }
+      }
+    })
 
     // Directly fetch robots.txt from the domain root
     let robotsContent = ''
@@ -273,24 +269,6 @@ export async function GET(request: Request) {
       twitterDescription: extractMetaContent('twitter:description', html),
       twitterImage: extractMetaContent('twitter:image', html)
     }
-
-    // Collect all icons
-    const icons: string[] = []
-    if (favicon && !icons.includes(favicon)) {
-      icons.push(favicon)
-    }
-
-    const iconLinks = extractAllLinks('icon', html)
-    const appleTouchIconLinks = extractAllLinks('apple-touch-icon', html)
-
-    ;[...iconLinks, ...appleTouchIconLinks].forEach((href) => {
-      if (href) {
-        const fullUrl = resolveUrl(href)
-        if (fullUrl && !icons.includes(fullUrl)) {
-          icons.push(fullUrl)
-        }
-      }
-    })
 
     // If meta parameters are specified, only return requested fields
     if (metaParams) {
