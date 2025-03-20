@@ -204,8 +204,8 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                                       </Button>
                                     </TooltipTrigger>
                                     <TooltipContent className="max-w-[300px]">
-                                      <p className="break-words">
-                                        Icon URL: {icon}
+                                      <p className="whitespace-break-spaces break-all">
+                                        {icon}
                                       </p>
                                     </TooltipContent>
                                   </Tooltip>
