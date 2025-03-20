@@ -87,7 +87,7 @@ export default function MetaForm({
         <div className="mt-2 h-6">
           {showError && (
             <p
-              className="text-red-500"
+              className="text-xs text-red-500"
               style={{ visibility: showError ? 'visible' : 'hidden' }}
             >
               {errorMessage}
