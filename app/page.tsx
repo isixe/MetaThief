@@ -19,9 +19,7 @@ export default function Home() {
     <main className="min-h-screen w-full overflow-x-hidden">
       <div
         className={`container mx-auto px-4 py-4 transition-all duration-500 ease-out md:p-4 ${
-          hasSearched
-            ? ''
-            : 'flex min-h-screen flex-col items-center justify-center'
+          hasSearched ? '' : 'mt-48 flex flex-col items-center justify-center'
         }`}
       >
         <div
