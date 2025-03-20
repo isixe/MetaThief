@@ -164,11 +164,11 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                     <div className="mt-3">
                       <p className="mb-2 text-sm font-medium">All icons:</p>
                       <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-                        <div className="flex flex-wrap gap-4 p-4">
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-4">
                           {icons.map((icon, index) => (
                             <div
                               key={index}
-                              className="flex-shrink-1 flex flex-col items-center"
+                              className="flex flex-col items-center"
                             >
                               <div className="relative mb-2 h-16 w-16 rounded border">
                                 <ImagePreview
