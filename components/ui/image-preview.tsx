@@ -42,7 +42,7 @@ export function ImagePreview({
       </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTitle>Favicon Image Preview</DialogTitle>
+        <DialogTitle></DialogTitle>
         <DialogContent className="max-w-3xl overflow-hidden border-0 bg-transparent p-0">
           <div className="relative">
             <button

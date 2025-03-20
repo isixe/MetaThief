@@ -164,7 +164,7 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                     <div className="mt-3">
                       <p className="mb-2 text-sm font-medium">All icons:</p>
                       <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-                        <div className="flex gap-4 p-4">
+                        <div className="flex flex-wrap gap-4 p-4">
                           {icons.map((icon, index) => (
                             <div
                               key={index}
