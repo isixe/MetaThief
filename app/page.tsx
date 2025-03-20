@@ -4,7 +4,6 @@ import MetaResults from '@/components/meta/meta-results'
 import MetaForm from '@/components/meta/meta-search'
 import type { MetaData } from '@/types/meta'
 import { useState } from 'react'
-import { Toaster } from 'react-hot-toast'
 
 export default function Home() {
   const [metaData, setMetaData] = useState<MetaData | null>(null)
@@ -57,7 +56,6 @@ export default function Home() {
           {metaData && <MetaResults metaData={metaData} />}
         </div>
       </div>
-      <Toaster />
     </main>
   )
 }
