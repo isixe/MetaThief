@@ -168,7 +168,7 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                           {icons.map((icon, index) => (
                             <div
                               key={index}
-                              className="flex flex-shrink-0 flex-col items-center"
+                              className="flex-shrink-1 flex flex-col items-center"
                             >
                               <div className="relative mb-2 h-16 w-16 rounded border">
                                 <ImagePreview
