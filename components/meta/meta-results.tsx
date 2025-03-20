@@ -163,22 +163,23 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                     </div>
                     <div className="mt-3">
                       <p className="mb-2 text-sm font-medium">All icons:</p>
-                      <ScrollArea className="w-full overflow-x-auto whitespace-nowrap rounded-md border">
+                      <ScrollArea className="w-full whitespace-nowrap rounded-md border">
                         <div className="flex gap-4 p-4">
                           {icons.map((icon, index) => (
                             <div
                               key={index}
                               className="flex flex-shrink-0 flex-col items-center"
                             >
-                              <div className="relative mb-2 h-16 w-16 overflow-hidden rounded border">
+                              <div className="relative mb-2 h-16 w-16 rounded border">
                                 <ImagePreview
                                   src={icon || '/placeholder.svg'}
                                   alt={`Icon ${index + 1}`}
                                   className="h-full w-full object-contain"
                                 />
                               </div>
-                              <div className="flex items-center">
+                              <div className="grid grid-cols-2">
                                 <Button
+                                  className="px-2"
                                   variant="ghost"
                                   size="sm"
                                   onClick={() =>
