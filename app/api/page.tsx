@@ -93,7 +93,7 @@ export default function ApiDocsPage() {
                   </code>
 
                   <p className="mt-4">Fetch specific meta tags:</p>
-                  <code className="block rounded bg-muted p-2">
+                  <code className="block overflow-x-auto rounded bg-muted p-2">
                     /api/meta?url=https://example.com&meta=title,description,favicon
                   </code>
                 </div>
