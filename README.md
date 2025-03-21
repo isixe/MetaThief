@@ -17,6 +17,7 @@ npm install
 ```
 
 ## Usage
+
 To start the server, run:
 
 ```bash
@@ -26,4 +27,5 @@ npm run dev
 The server will start on http://localhost:3000.
 
 ## License
+
 This project is licensed under the [MIT](https://github.com/isixe/MetaThief?tab=MIT-1-ov-file) License. See the LICENSE file for more details.
