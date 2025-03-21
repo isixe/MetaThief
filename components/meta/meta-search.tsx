@@ -30,7 +30,8 @@ export default function MetaForm({
     e.preventDefault()
 
     // Basic URL validation
-    if (!url.trim() || !url.startsWith('http')) {
+    const urlPattern = /^https?:\/\/\S+/
+    if (!url.trim() || !urlPattern.test(url)) {
       setShowError(true)
       setErrorMessage(
         'Please enter a valid URL starting with http:// or https://'
