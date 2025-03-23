@@ -13,7 +13,7 @@ MetaThief is a website tool that extracts metadata from web pages, such as meta 
 To install the dependencies, run:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ npm install
 To start the server, run:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 The server will start on http://localhost:3000.
