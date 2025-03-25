@@ -1,6 +1,6 @@
 'use client'
 
-import { clsxMerge } from '@/utils/clsx'
+import { cn } from '@/lib/utils'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import Image from 'next/image'
@@ -28,7 +28,7 @@ export function ImagePreview({
         <Image
           src={src || fallbackSrc}
           alt={alt}
-          className={clsxMerge(
+          className={cn(
             'h-full w-full cursor-pointer object-contain',
             className
           )}
