@@ -10,13 +10,11 @@ import { useState } from 'react'
 
 interface MetaFormProps {
   setMetaData: (data: MetaData | null) => void
-  setError: (error: string | null) => void
   compact?: boolean
 }
 
 export default function MetaForm({
   setMetaData,
-  setError,
   compact = false
 }: MetaFormProps) {
   const [url, setUrl] = useState('')
@@ -41,7 +39,6 @@ export default function MetaForm({
 
     setIsLoading(true)
     setShowError(false)
-    setError(null)
 
     try {
       const response = await fetch(`/api/meta?url=${encodeURIComponent(url)}`)
@@ -60,7 +57,6 @@ export default function MetaForm({
           ? error.message
           : 'Invalid URL or unable to fetch meta data. Please try again.'
       )
-      setError(errorMessage)
       setMetaData(null)
     } finally {
       setIsLoading(false)

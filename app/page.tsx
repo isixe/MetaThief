@@ -7,7 +7,6 @@ import { useState } from 'react'
 
 export default function Home() {
   const [metaData, setMetaData] = useState<MetaData | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [hasSearched, setHasSearched] = useState(false)
 
   const handleSearch = (data: MetaData | null) => {
@@ -38,11 +37,7 @@ export default function Home() {
             Enter a URL to quickly get metadata, icons, and social media preview
             data for any website.
           </p>
-          <MetaForm
-            setMetaData={handleSearch}
-            setError={setError}
-            compact={hasSearched}
-          />
+          <MetaForm setMetaData={handleSearch} compact={hasSearched} />
         </div>
         <div
           className={`transition-all delay-200 duration-500 ease-out ${
