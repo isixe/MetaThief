@@ -3,11 +3,30 @@ import Header from '@/components/layout/header'
 import { Toaster } from '@/components/ui/toaster'
 import '@/styles/global.css'
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 
-export const metadata: Metadata = {
-  title: 'MetaThief',
-  description:
-    'Enter a URL to quickly get metadata, icons, and social media preview data for any website.'
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers()
+  const protocol = headersList.get('x-forwarded-proto') || 'http'
+  const host = headersList.get('host') || 'localhost:3000'
+  const url = `${protocol}://${host}`
+
+  return {
+    title: 'MetaThief',
+    keywords: 'metadata, metathief, metadata viewer, metadata checker',
+    description: 'Enter a URL to quickly get metadata details for any website.',
+    alternates: {
+      canonical: url
+    },
+    openGraph: {
+      title: 'MetaThief',
+      description:
+        'Enter a URL to quickly get metadata details for any website.',
+      url,
+      siteName: 'MetaThief',
+      locale: 'en'
+    }
+  }
 }
 
 export default function RootLayout({
