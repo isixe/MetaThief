@@ -21,7 +21,7 @@ pnpm install
 To start the server, run:
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 The server will start on http://localhost:3000.
