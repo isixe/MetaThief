@@ -24,7 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
         'Enter a URL to quickly get metadata details for any website.',
       url,
       siteName: 'MetaThief',
-      locale: 'en'
+      locale: 'en',
+      images: '/preview.jpg'
     }
   }
 }

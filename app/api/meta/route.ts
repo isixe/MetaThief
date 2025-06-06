@@ -206,7 +206,7 @@ export async function GET(request: Request) {
           checkFavicon(format)
         )
         favicon = await Promise.any(faviconPromises)
-      } catch (error) {
+      } catch {
         const appleTouchIconHref = extractLinkHref('apple-touch-icon', html)
         if (appleTouchIconHref) {
           const faviconUrl = new URL(appleTouchIconHref, url)
@@ -284,7 +284,7 @@ export async function GET(request: Request) {
 
     // If meta parameters are specified, only return requested fields
     if (metaParams) {
-      const filteredData: { [key: string]: any } = {}
+      const filteredData: { [key: string]: string | undefined } = {}
       metaParams.forEach((param) => {
         filteredData[param] = metaData[param]
       })
