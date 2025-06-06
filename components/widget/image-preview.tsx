@@ -1,11 +1,11 @@
 'use client'
 
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
-import { Dialog, DialogContent } from './dialog'
 
 interface ImagePreviewProps {
   src: string

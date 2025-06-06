@@ -9,11 +9,11 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { ImagePreview } from '@/components/widget/image-preview'
 import type { MetaData } from '@/types/meta'
 import { Check, Copy, HelpCircle } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-import { ImagePreview } from '../ui/image-preview'
 
 interface MetaResultsProps {
   metaData: MetaData
