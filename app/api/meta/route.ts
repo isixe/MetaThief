@@ -249,8 +249,17 @@ export async function GET(request: Request) {
     try {
       const robotsUrl = `${baseUrl.origin}/robots.txt`
       const robotsResponse = await fetch(robotsUrl)
+
       if (robotsResponse.ok) {
-        robotsContent = await robotsResponse.text()
+        const contentType = robotsResponse.headers.get('content-type')
+
+        if (contentType && contentType.includes('text/plain')) {
+          robotsContent = await robotsResponse.text()
+        } else {
+          console.error('Invalid robots.txt content type:', contentType)
+        }
+      } else {
+        console.error('Failed to fetch robots.txt:', robotsResponse.status)
       }
     } catch (error) {
       console.error('Error fetching robots.txt:', error)
