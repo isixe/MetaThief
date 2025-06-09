@@ -1,3 +1,4 @@
+import he from 'he'
 import { NextResponse } from 'next/server'
 
 // All supported meta tags
@@ -82,15 +83,16 @@ const extractMetaContent = (
     'i'
   )
   const match = html.match(regex)
-  if (match) return match[1]
-
-  // Try the reverse order (content attribute before name/property)
+  if (match) {
+    return he.decode(match[1])
+  }
+  // If not found, try the reverse order (name/property attribute before content)
   const reverseRegex = new RegExp(
     `<meta[^>]*content=["']([^"']*)["'][^>]*${attributeType}=["']${name}["'][^>]*>`,
     'i'
   )
   const reverseMatch = html.match(reverseRegex)
-  return reverseMatch ? reverseMatch[1] : ''
+  return reverseMatch ? he.decode(reverseMatch[1]) : ''
 }
 
 const extractLinkHref = (rel: string, html: string): string => {
