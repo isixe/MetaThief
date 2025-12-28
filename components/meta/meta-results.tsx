@@ -257,6 +257,46 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                     )}
                   </div>
                 )}
+
+                {key === 'ogImage' && (
+                  <div className="break-words text-sm">
+                    {metaInfo[key] ? (
+                      <div className="mt-2">
+                        <div className="relative w-32 overflow-hidden rounded border">
+                          <ImagePreview
+                            src={metaInfo[key] || '/placeholder.svg'}
+                            alt="Open Graph Image"
+                            className="h-full w-full object-contain"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="italic text-gray-400">
+                        Not available
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {key === 'twitterImage' && (
+                  <div className="break-words text-sm">
+                    {metaInfo[key] ? (
+                      <div className="mt-2">
+                        <div className="relative w-32 overflow-hidden rounded border">
+                          <ImagePreview
+                            src={metaInfo[key] || '/placeholder.svg'}
+                            alt="Twitter Image"
+                            className="h-full w-full object-contain"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="italic text-gray-400">
+                        Not available
+                      </span>
+                    )}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
