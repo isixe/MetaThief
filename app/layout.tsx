@@ -7,8 +7,8 @@ import { headers } from 'next/headers'
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers()
-  const protocol = headersList.get('x-forwarded-proto') || 'http'
-  const host = headersList.get('host') || 'localhost:3000'
+  const protocol = headersList.get('x-forwarded-proto')
+  const host = headersList.get('host')
   const url = `${protocol}://${host}`
 
   return {
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url,
       siteName: 'MetaThief',
       locale: 'en',
-      images: '/preview.jpg'
+      images: `${url}/preview.jpg`
     }
   }
 }
