@@ -14,7 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: 'MetaThief',
-    keywords: 'metadata, metathief, metadata viewer, metadata checker',
+    keywords:
+      'metadata, metathief, metadata viewer, metadata checker, metadata check, website metadata, website metadata viewer, website metadata checker,metadata details, website metadata details, metadata tool, 网站元信息, 元信息查看器, 元信息检查器',
     description: 'Enter a URL to quickly get metadata details for any website.',
     alternates: {
       canonical: url
