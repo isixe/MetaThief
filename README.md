@@ -1,14 +1,16 @@
 # MetaThief
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/isixe/MetaThief/refs/heads/main/public/favicon.ico" alt="MetaThief Favicon" width="100" height="100" />
+</p>
+
+<p align="center">
   <strong>A powerful website metadata extraction tool</strong>
 </p>
 
 <p align="center">
   Extract meta tags, favicons, Open Graph, Twitter Cards, and more from any web page
 </p>
-
----
 
 ## Features
 
@@ -95,9 +97,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/isixe">isixe</a>
-</p>
