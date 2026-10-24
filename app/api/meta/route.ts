@@ -244,25 +244,27 @@ export async function GET(request: Request) {
       }
     })
 
-    // Directly fetch robots.txt from the domain root
+    const shouldFetchRobots = !metaParams || metaParams.includes('robots')
     let robotsContent = ''
-    try {
-      const robotsUrl = `${baseUrl.origin}/robots.txt`
-      const robotsResponse = await fetch(robotsUrl)
+    if (shouldFetchRobots) {
+      try {
+        const robotsUrl = `${baseUrl.origin}/robots.txt`
+        const robotsResponse = await fetch(robotsUrl)
 
-      if (robotsResponse.ok) {
-        const contentType = robotsResponse.headers.get('content-type')
+        if (robotsResponse.ok) {
+          const contentType = robotsResponse.headers.get('content-type')
 
-        if (contentType && contentType.includes('text/plain')) {
-          robotsContent = await robotsResponse.text()
+          if (contentType && contentType.includes('text/plain')) {
+            robotsContent = await robotsResponse.text()
+          } else {
+            console.error('Invalid robots.txt content type:', contentType)
+          }
         } else {
-          console.error('Invalid robots.txt content type:', contentType)
+          console.error('Failed to fetch robots.txt:', robotsResponse.status)
         }
-      } else {
-        console.error('Failed to fetch robots.txt:', robotsResponse.status)
+      } catch (error) {
+        console.error('Error fetching robots.txt:', error)
       }
-    } catch (error) {
-      console.error('Error fetching robots.txt:', error)
     }
 
     const metaData: { [key: string]: string } = {
