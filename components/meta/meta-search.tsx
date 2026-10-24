@@ -13,6 +13,23 @@ interface MetaFormProps {
   compact?: boolean
 }
 
+const normalizeUrl = (value: string) => {
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  if (/^https?:\/\//i.test(trimmed)) return trimmed
+  if (/^[a-z][a-z\d+.-]*:\/\//i.test(trimmed)) return ''
+  return `https://${trimmed.replace(/^\/+/, '')}`
+}
+
+const isValidUrl = (value: string) => {
+  try {
+    const { protocol } = new URL(value)
+    return protocol === 'http:' || protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 export default function MetaForm({
   setMetaData,
   compact = false
@@ -27,12 +44,11 @@ export default function MetaForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Basic URL validation
-    const urlPattern = /^https?:\/\/\S+/
-    if (!url.trim() || !urlPattern.test(url)) {
+    const targetUrl = normalizeUrl(url)
+    if (!isValidUrl(targetUrl)) {
       setShowError(true)
       setErrorMessage(
-        'Please enter a valid URL starting with http:// or https://'
+        'Please enter a valid URL or domain (e.g., example.com or https://example.com/page)'
       )
       return
     }
@@ -41,15 +57,17 @@ export default function MetaForm({
     setShowError(false)
 
     try {
-      const response = await fetch(`/api/meta?url=${encodeURIComponent(url)}`)
+      const response = await fetch(
+        `/api/meta?url=${encodeURIComponent(targetUrl)}`
+      )
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to fetch meta data')
       }
 
-      console.log(response.text)
       const data = await response.json()
-      setMetaData(data, url.trim())
+      setUrl(targetUrl)
+      setMetaData(data, targetUrl)
     } catch (error) {
       setShowError(true)
       setErrorMessage(
@@ -70,8 +88,10 @@ export default function MetaForm({
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="flex gap-2">
           <Input
-            type="url"
-            placeholder="Enter website URL (e.g., https://example.com)"
+            type="text"
+            inputMode="url"
+            autoComplete="url"
+            placeholder="Enter a URL or domain (e.g., example.com/page)"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             required
