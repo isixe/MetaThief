@@ -19,5 +19,5 @@ export interface MetaData {
   twitterDescription?: string
   twitterImage?: string
   icons?: string[]
-  [key: string]: any
+  [key: string]: string | string[] | undefined
 }

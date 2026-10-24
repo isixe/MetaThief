@@ -10,6 +10,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { ImagePreview } from '@/components/widget/image-preview'
+import { resolveUrl } from '@/lib/utils'
 import type { MetaData } from '@/types/meta'
 import { Check, Copy, HelpCircle } from 'lucide-react'
 import { useState } from 'react'
@@ -17,15 +18,19 @@ import toast from 'react-hot-toast'
 
 interface MetaResultsProps {
   metaData: MetaData
+  baseUrl?: string
 }
 
-export default function MetaResults({ metaData }: MetaResultsProps) {
+export default function MetaResults({ metaData, baseUrl }: MetaResultsProps) {
   const [copiedFields, setCopiedFields] = useState<{ [key: string]: boolean }>(
     {}
   )
 
-  const handleCopy = (text: string | undefined, field: string) => {
-    const contentToCopy = text || ''
+  const resolveMetaUrl = (value: MetaData[string], base?: string) =>
+    resolveUrl(Array.isArray(value) ? value[0] : value, base)
+
+  const handleCopy = (text: MetaData[string], field: string) => {
+    const contentToCopy = Array.isArray(text) ? text.join(', ') : text || ''
     navigator.clipboard.writeText(contentToCopy)
     setCopiedFields({ ...copiedFields, [field]: true })
 
@@ -175,7 +180,10 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                     <div className="mb-2 flex items-start gap-2">
                       <div className="relative h-6 w-6 flex-shrink-0 overflow-hidden rounded border">
                         <ImagePreview
-                          src={metaInfo.favicon || '/placeholder.svg'}
+                          src={
+                            resolveUrl(metaInfo.favicon, baseUrl) ||
+                            '/placeholder.svg'
+                          }
                           alt="Primary Favicon"
                           className="h-full w-full object-contain"
                         />
@@ -199,7 +207,10 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                             >
                               <div className="relative mb-2 h-16 w-16 rounded border">
                                 <ImagePreview
-                                  src={icon || '/placeholder.svg'}
+                                  src={
+                                    resolveUrl(icon, baseUrl) ||
+                                    '/placeholder.svg'
+                                  }
                                   alt={`Icon ${index + 1}`}
                                   className="h-full w-full object-contain"
                                 />
@@ -264,7 +275,10 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                       <div className="mt-2">
                         <div className="relative w-32 overflow-hidden rounded border">
                           <ImagePreview
-                            src={metaInfo[key] || '/placeholder.svg'}
+                            src={
+                              resolveMetaUrl(metaInfo[key], baseUrl) ||
+                              '/placeholder.svg'
+                            }
                             alt="Open Graph Image"
                             className="h-full w-full object-contain"
                           />
@@ -284,7 +298,10 @@ export default function MetaResults({ metaData }: MetaResultsProps) {
                       <div className="mt-2">
                         <div className="relative w-32 overflow-hidden rounded border">
                           <ImagePreview
-                            src={metaInfo[key] || '/placeholder.svg'}
+                            src={
+                              resolveMetaUrl(metaInfo[key], baseUrl) ||
+                              '/placeholder.svg'
+                            }
                             alt="Twitter Image"
                             className="h-full w-full object-contain"
                           />

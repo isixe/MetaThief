@@ -7,10 +7,12 @@ import { useState } from 'react'
 
 export default function Home() {
   const [metaData, setMetaData] = useState<MetaData | null>(null)
+  const [sourceUrl, setSourceUrl] = useState('')
   const [hasSearched, setHasSearched] = useState(false)
 
-  const handleSearch = (data: MetaData | null) => {
+  const handleSearch = (data: MetaData | null, url?: string) => {
     setMetaData(data)
+    setSourceUrl(url ?? '')
     setHasSearched(true)
   }
 
@@ -46,7 +48,7 @@ export default function Home() {
               : 'translate-y-4 opacity-0'
           }`}
         >
-          {metaData && <MetaResults metaData={metaData} />}
+          {metaData && <MetaResults metaData={metaData} baseUrl={sourceUrl} />}
         </div>
       </div>
     </main>

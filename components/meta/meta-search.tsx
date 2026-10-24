@@ -9,7 +9,7 @@ import { Search } from 'lucide-react'
 import { useState } from 'react'
 
 interface MetaFormProps {
-  setMetaData: (data: MetaData | null) => void
+  setMetaData: (data: MetaData | null, sourceUrl?: string) => void
   compact?: boolean
 }
 
@@ -49,7 +49,7 @@ export default function MetaForm({
 
       console.log(response.text)
       const data = await response.json()
-      setMetaData(data)
+      setMetaData(data, url.trim())
     } catch (error) {
       setShowError(true)
       setErrorMessage(
